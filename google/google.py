@@ -31,10 +31,17 @@ def authenticate():
 
     return creds
 
-authenticate()
 
-service = build("drive", "v3", credentials=authenticate())
 
-service.files().list().execute().keys()
+def get_drive(creds):
+    return build("drive", "v3", credentials=creds)
+        
 
-service.files().list().execute()["files"]
+drive = get_drive(authenticate())
+
+drive.files().list().execute().keys()
+
+files = drive.files().list().execute()["files"]
+
+list(filter(lambda f: f["mimeType"][::-1].split(".")[0][::-1]=="folder", files))
+
